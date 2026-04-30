@@ -48,9 +48,18 @@
   .week-card.collapsed .chevron { transform: rotate(-90deg); }
   .week-card.collapsed .week-body { display: none; }
   .week-body { padding: 4px 0 8px; }
-  .session-row { display: flex; align-items: flex-start; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--border); }
+  .session-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.15s; -webkit-tap-highlight-color: transparent; }
   .session-row:last-child { border-bottom: none; }
-  .session-day { font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace; color: var(--muted); min-width: 28px; padding-top: 2px; }
+  .session-row:active { background: var(--bg); }
+  .session-row.done { background: #F0FAF0; }
+  .session-row.done .session-main { text-decoration: line-through; color: var(--muted); }
+  .session-row.done .session-sub { text-decoration: line-through; }
+  .session-left { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 28px; }
+  .session-day { font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace; color: var(--muted); }
+  .check-circle { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; background: var(--surface); }
+  .session-row.done .check-circle { background: #3B6D11; border-color: #3B6D11; }
+  .check-icon { font-size: 11px; color: #fff; opacity: 0; transition: opacity 0.2s; }
+  .session-row.done .check-icon { opacity: 1; }
   .session-content { flex: 1; }
   .session-tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; margin-bottom: 4px; letter-spacing: 0.04em; text-transform: uppercase; }
   .tag-z2 { background: var(--z2-bg); color: var(--z2-text); }
@@ -104,8 +113,8 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">8×400m a 3:50–4:05 /km ✓</div><div class="session-sub">hecho · 4,71 km · 4:28 /km · 163 bpm</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">1:40h a 156 bpm</div><div class="session-sub">tarde/noche · ~13–14 km</div></div></div>
+      <div class="session-row done" id="abr-jue-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">8×400m a 3:50–4:05 /km</div><div class="session-sub">4,71 km · 4:28 /km · 163 bpm ✓</div></div></div>
+      <div class="session-row" id="abr-dom-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">1:40h a 156 bpm</div><div class="session-sub">tarde/noche · ~13–14 km</div></div></div>
     </div>
   </div>
 </div>
@@ -119,9 +128,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">50 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">4×800m a 4:10–4:20 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:00h a 156 bpm</div><div class="session-sub">~17–18 km</div></div></div>
+      <div class="session-row" id="may-mar-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">50 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="may-jue-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">4×800m a 4:10–4:20 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="may-dom-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:00h a 156 bpm</div><div class="session-sub">~17–18 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -130,9 +139,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">55 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×800m a 4:05–4:10 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:30h a 156 bpm</div><div class="session-sub">~21–22 km</div></div></div>
+      <div class="session-row" id="may-mar-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">55 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="may-jue-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×800m a 4:05–4:10 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="may-dom-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:30h a 156 bpm</div><div class="session-sub">~21–22 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -141,9 +150,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-descarga">Descarga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">40 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">4×400m a 3:50 /km</div><div class="session-sub">corto y fresco</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">1:30h a 156 bpm</div><div class="session-sub">~12–13 km</div></div></div>
+      <div class="session-row" id="may-mar-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">40 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="may-jue-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">4×400m a 3:50 /km</div><div class="session-sub">corto y fresco</div></div></div>
+      <div class="session-row" id="may-dom-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">1:30h a 156 bpm</div><div class="session-sub">~12–13 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -152,9 +161,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">55–60 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×800m a 4:05–4:10 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:30h a 156 bpm</div><div class="session-sub">~21–22 km</div></div></div>
+      <div class="session-row" id="may-mar-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">55–60 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="may-jue-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×800m a 4:05–4:10 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="may-dom-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:30h a 156 bpm</div><div class="session-sub">~21–22 km</div></div></div>
     </div>
   </div>
 </div>
@@ -168,9 +177,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-descarga">Descarga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">40 min a 155–158 bpm</div><div class="session-sub">viaje — suave</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">4×400m a 3:50 /km</div><div class="session-sub">corto y fresco</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">1:30h a 156 bpm</div><div class="session-sub">~12–13 km</div></div></div>
+      <div class="session-row" id="jun-mar-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">40 min a 155–158 bpm</div><div class="session-sub">viaje — suave</div></div></div>
+      <div class="session-row" id="jun-jue-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">4×400m a 3:50 /km</div><div class="session-sub">corto y fresco</div></div></div>
+      <div class="session-row" id="jun-dom-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">1:30h a 156 bpm</div><div class="session-sub">~12–13 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -179,9 +188,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">60 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">4×1km a 4:10–4:15 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:30h a 156 bpm</div><div class="session-sub">~21–22 km</div></div></div>
+      <div class="session-row" id="jun-mar-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">60 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="jun-jue-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">4×1km a 4:10–4:15 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="jun-dom-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:30h a 156 bpm</div><div class="session-sub">~21–22 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -190,9 +199,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">65 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×1km a 4:10 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:45h a 156 bpm</div><div class="session-sub">~23–24 km</div></div></div>
+      <div class="session-row" id="jun-mar-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">65 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="jun-jue-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×1km a 4:10 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="jun-dom-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:45h a 156 bpm</div><div class="session-sub">~23–24 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -201,9 +210,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">65 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×1km a 4:05 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">3:00h a 156 bpm</div><div class="session-sub">~25–27 km</div></div></div>
+      <div class="session-row" id="jun-mar-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">65 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="jun-jue-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×1km a 4:05 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="jun-dom-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">3:00h a 156 bpm</div><div class="session-sub">~25–27 km</div></div></div>
     </div>
   </div>
 </div>
@@ -217,9 +226,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-descarga">Descarga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">40 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">4×400m a 3:50 /km</div><div class="session-sub">corto y fresco</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">1:30h a 156 bpm</div><div class="session-sub">~12–13 km</div></div></div>
+      <div class="session-row" id="jul-mar-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">40 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="jul-jue-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">4×400m a 3:50 /km</div><div class="session-sub">corto y fresco</div></div></div>
+      <div class="session-row" id="jul-dom-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">1:30h a 156 bpm</div><div class="session-sub">~12–13 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -228,9 +237,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">65 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×1km a 4:05 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">3:00h a 156 bpm</div><div class="session-sub">~25–27 km</div></div></div>
+      <div class="session-row" id="jul-mar-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">65 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="jul-jue-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×1km a 4:05 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="jul-dom-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">3:00h a 156 bpm</div><div class="session-sub">~25–27 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -239,9 +248,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">70 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×1km a 4:00 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">3:00h — últimos 20 min a 5:30 /km</div><div class="session-sub">empieza el ritmo específico</div></div></div>
+      <div class="session-row" id="jul-mar-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">70 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="jul-jue-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×1km a 4:00 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="jul-dom-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">3:00h — últimos 20 min a 5:30 /km</div><div class="session-sub">empieza el ritmo específico</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -250,9 +259,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">70 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">6×1km a 4:00 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">3:00h — últimos 30 min a 5:20 /km</div><div class="session-sub">ritmo específico maratón</div></div></div>
+      <div class="session-row" id="jul-mar-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">70 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="jul-jue-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">6×1km a 4:00 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="jul-dom-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">3:00h — últimos 30 min a 5:20 /km</div><div class="session-sub">ritmo específico maratón</div></div></div>
     </div>
   </div>
 </div>
@@ -266,9 +275,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-descarga">Descarga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">40 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">4×400m a 3:50 /km</div><div class="session-sub">corto y fresco</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">1:30h a 156 bpm</div><div class="session-sub">~12–13 km</div></div></div>
+      <div class="session-row" id="ago-mar-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">40 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="ago-jue-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">4×400m a 3:50 /km</div><div class="session-sub">corto y fresco</div></div></div>
+      <div class="session-row" id="ago-dom-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">1:30h a 156 bpm</div><div class="session-sub">~12–13 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -277,9 +286,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga máx.</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">70 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">6×1km a 3:55 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">3:00h — últimos 40 min a 5:10 /km</div><div class="session-sub">~25–27 km</div></div></div>
+      <div class="session-row" id="ago-mar-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">70 min a 155–158 bpm</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="ago-jue-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">6×1km a 3:55 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="ago-dom-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">3:00h — últimos 40 min a 5:10 /km</div><div class="session-sub">~25–27 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -288,9 +297,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-tapering">Tapering</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">45 min Z2 suave</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">4×800m a 4:00 /km</div><div class="session-sub">fresco, con calidad</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">1:45h suave a 156 bpm</div><div class="session-sub">~14–15 km</div></div></div>
+      <div class="session-row" id="ago-mar-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">45 min Z2 suave</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="ago-jue-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">4×800m a 4:00 /km</div><div class="session-sub">fresco, con calidad</div></div></div>
+      <div class="session-row" id="ago-dom-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">1:45h suave a 156 bpm</div><div class="session-sub">~14–15 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -299,9 +308,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-race">Test 🎯</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">30 min muy suave</div><div class="session-sub">activación</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">3×400m a 3:50 /km</div><div class="session-sub">activación — piernas frescas</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-race">Test</span><div class="session-main">Media maratón test 🎯</div><div class="session-sub">objetivo: ver forma real</div></div></div>
+      <div class="session-row" id="ago-mar-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">30 min muy suave</div><div class="session-sub">activación</div></div></div>
+      <div class="session-row" id="ago-jue-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">3×400m a 3:50 /km</div><div class="session-sub">activación — piernas frescas</div></div></div>
+      <div class="session-row" id="ago-dom-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-race">Test</span><div class="session-main">Media maratón test 🎯</div><div class="session-sub">objetivo: ver forma real</div></div></div>
     </div>
   </div>
 </div>
@@ -315,9 +324,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Específico</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">70 min — últimos 20 min a 5:05 /km</div><div class="session-sub">ritmo objetivo Bilbao</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">6×1km a 3:55 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:45h — últimos 30 min a 5:05 /km</div><div class="session-sub">~23–24 km</div></div></div>
+      <div class="session-row" id="sep-mar-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">70 min — últimos 20 min a 5:05 /km</div><div class="session-sub">ritmo objetivo Bilbao</div></div></div>
+      <div class="session-row" id="sep-jue-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">6×1km a 3:55 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="sep-dom-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:45h — últimos 30 min a 5:05 /km</div><div class="session-sub">~23–24 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -326,9 +335,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-descarga">Descarga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">40 min Z2 suave</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">4×800m a 4:05 /km</div><div class="session-sub">corto y fresco</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">1:30h suave a 156 bpm</div><div class="session-sub">~12–13 km</div></div></div>
+      <div class="session-row" id="sep-mar-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">40 min Z2 suave</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="sep-jue-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">4×800m a 4:05 /km</div><div class="session-sub">corto y fresco</div></div></div>
+      <div class="session-row" id="sep-dom-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-descarga">Descarga</span><div class="session-main">1:30h suave a 156 bpm</div><div class="session-sub">~12–13 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -337,9 +346,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Específico</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">70 min — últimos 25 min a 5:05 /km</div><div class="session-sub">ritmo objetivo Bilbao</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">6×1km a 3:50 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:45h — últimos 40 min a 5:05 /km</div><div class="session-sub">~23–24 km</div></div></div>
+      <div class="session-row" id="sep-mar-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">70 min — últimos 25 min a 5:05 /km</div><div class="session-sub">ritmo objetivo Bilbao</div></div></div>
+      <div class="session-row" id="sep-jue-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">6×1km a 3:50 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="sep-dom-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:45h — últimos 40 min a 5:05 /km</div><div class="session-sub">~23–24 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -348,9 +357,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Específico</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">65 min — últimos 30 min a 5:00 /km</div><div class="session-sub">ritmo objetivo Bilbao</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×1km a 3:55 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:30h — últimos 40 min a 5:00 /km</div><div class="session-sub">~21–22 km</div></div></div>
+      <div class="session-row" id="sep-mar-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">65 min — últimos 30 min a 5:00 /km</div><div class="session-sub">ritmo objetivo Bilbao</div></div></div>
+      <div class="session-row" id="sep-jue-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×1km a 3:55 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="sep-dom-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:30h — últimos 40 min a 5:00 /km</div><div class="session-sub">~21–22 km</div></div></div>
     </div>
   </div>
 </div>
@@ -364,9 +373,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-tapering">Tapering</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">45 min Z2 suave</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">4×800m a 4:00 /km</div><div class="session-sub">fresco, con calidad</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">1:45h suave a 156 bpm</div><div class="session-sub">~14–15 km</div></div></div>
+      <div class="session-row" id="oct-mar-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">45 min Z2 suave</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="oct-jue-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">4×800m a 4:00 /km</div><div class="session-sub">fresco, con calidad</div></div></div>
+      <div class="session-row" id="oct-dom-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">1:45h suave a 156 bpm</div><div class="session-sub">~14–15 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -375,9 +384,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-tapering">Tapering</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">30 min muy suave</div><div class="session-sub">activación</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">3×400m a 3:50 /km</div><div class="session-sub">activación — piernas frescas</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">45 min muy suave</div><div class="session-sub">últimos km antes de Bilbao</div></div></div>
+      <div class="session-row" id="oct-mar-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">30 min muy suave</div><div class="session-sub">activación</div></div></div>
+      <div class="session-row" id="oct-jue-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">3×400m a 3:50 /km</div><div class="session-sub">activación — piernas frescas</div></div></div>
+      <div class="session-row" id="oct-dom-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">45 min muy suave</div><div class="session-sub">últimos km antes de Bilbao</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -386,9 +395,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-race">Carrera</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">20 min muy suave</div><div class="session-sub">últimos días</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">Descanso o 15 min andando</div><div class="session-sub">piernas frescas</div></div></div>
-      <div class="session-row"><div class="session-day">SAB</div><div class="session-content"><span class="session-tag tag-race">Carrera</span><div class="session-main">Media Maratón Bilbao 🎯</div><div class="session-sub">objetivo: 4:30 · 5:05 /km</div></div></div>
+      <div class="session-row" id="oct-mar-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">20 min muy suave</div><div class="session-sub">últimos días</div></div></div>
+      <div class="session-row" id="oct-jue-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">Descanso o 15 min andando</div><div class="session-sub">piernas frescas</div></div></div>
+      <div class="session-row" id="oct-sab-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">SAB</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-race">Carrera</span><div class="session-main">Media Maratón Bilbao 🎯</div><div class="session-sub">objetivo: 4:30 · 5:05 /km</div></div></div>
     </div>
   </div>
   <div class="race-banner">
@@ -401,9 +410,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-recovery">Recuperación</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-recovery">Recuperación</span><div class="session-main">30 min muy suave</div><div class="session-sub">sin mirar pace ni FC</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-recovery">Recuperación</span><div class="session-main">Descanso o 30 min andando</div><div class="session-sub"></div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-recovery">Recuperación</span><div class="session-main">45 min suave</div><div class="session-sub">sin mirar pace ni FC</div></div></div>
+      <div class="session-row" id="oct-mar-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-recovery">Recuperación</span><div class="session-main">30 min muy suave</div><div class="session-sub">sin mirar pace ni FC</div></div></div>
+      <div class="session-row" id="oct-jue-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-recovery">Recuperación</span><div class="session-main">Descanso o 30 min andando</div><div class="session-sub"></div></div></div>
+      <div class="session-row" id="oct-dom-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-recovery">Recuperación</span><div class="session-main">45 min suave</div><div class="session-sub">sin mirar pace ni FC</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -412,9 +421,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-recovery">Rec. activa</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">50 min Z2 suave</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">4×800m a 4:10 /km</div><div class="session-sub">mover piernas</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">1:15h suave a 156 bpm</div><div class="session-sub">~10–11 km</div></div></div>
+      <div class="session-row" id="oct-mar-5" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">50 min Z2 suave</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="oct-jue-5" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">4×800m a 4:10 /km</div><div class="session-sub">mover piernas</div></div></div>
+      <div class="session-row" id="oct-dom-5" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">1:15h suave a 156 bpm</div><div class="session-sub">~10–11 km</div></div></div>
     </div>
   </div>
 </div>
@@ -428,9 +437,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">55 min Z2</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×800m a 4:05 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">1:45h a 156 bpm</div><div class="session-sub">~14–15 km</div></div></div>
+      <div class="session-row" id="nov-mar-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">55 min Z2</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="nov-jue-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×800m a 4:05 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="nov-dom-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">1:45h a 156 bpm</div><div class="session-sub">~14–15 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -439,9 +448,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">60 min — últimos 20 min a 5:30 /km</div><div class="session-sub">ritmo maratón suave</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×800m a 4:00 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:00h — últimos 20 min a 5:30 /km</div><div class="session-sub">~17–18 km</div></div></div>
+      <div class="session-row" id="nov-mar-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-z2">Z2</span><div class="session-main">60 min — últimos 20 min a 5:30 /km</div><div class="session-sub">ritmo maratón suave</div></div></div>
+      <div class="session-row" id="nov-jue-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-series">Series</span><div class="session-main">5×800m a 4:00 /km</div><div class="session-sub">2 km cal. + 1–2 km vuelta</div></div></div>
+      <div class="session-row" id="nov-dom-2" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-long">Long run</span><div class="session-main">2:00h — últimos 20 min a 5:30 /km</div><div class="session-sub">~17–18 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -450,9 +459,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-tapering">Tapering</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">40 min Z2 suave</div><div class="session-sub">pace el que salga</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">3×800m a 4:05 /km</div><div class="session-sub">fresco</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">1:15h suave a 156 bpm</div><div class="session-sub">~10–11 km</div></div></div>
+      <div class="session-row" id="nov-mar-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">40 min Z2 suave</div><div class="session-sub">pace el que salga</div></div></div>
+      <div class="session-row" id="nov-jue-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">3×800m a 4:05 /km</div><div class="session-sub">fresco</div></div></div>
+      <div class="session-row" id="nov-dom-3" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">1:15h suave a 156 bpm</div><div class="session-sub">~10–11 km</div></div></div>
     </div>
   </div>
   <div class="week-card">
@@ -461,9 +470,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-tapering">Tapering</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">MAR</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">30 min muy suave</div><div class="session-sub">activación</div></div></div>
-      <div class="session-row"><div class="session-day">JUE</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">3×400m a 3:50 /km</div><div class="session-sub">activación — piernas frescas</div></div></div>
-      <div class="session-row"><div class="session-day">DOM</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">40 min muy suave</div><div class="session-sub">últimos km antes de Lanzarote</div></div></div>
+      <div class="session-row" id="nov-mar-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MAR</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">30 min muy suave</div><div class="session-sub">activación</div></div></div>
+      <div class="session-row" id="nov-jue-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">JUE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">3×400m a 3:50 /km</div><div class="session-sub">activación — piernas frescas</div></div></div>
+      <div class="session-row" id="nov-dom-4" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">DOM</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">40 min muy suave</div><div class="session-sub">últimos km antes de Lanzarote</div></div></div>
     </div>
   </div>
 </div>
@@ -481,9 +490,9 @@
       <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-race">Carrera 🎯</span><span class="chevron">›</span></div>
     </div>
     <div class="week-body">
-      <div class="session-row"><div class="session-day">LUN</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">20 min muy suave</div><div class="session-sub">piernas frescas</div></div></div>
-      <div class="session-row"><div class="session-day">MIE</div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">Descanso o 15 min andando</div><div class="session-sub">piernas frescas</div></div></div>
-      <div class="session-row"><div class="session-day">VIE</div><div class="session-content"><span class="session-tag tag-race">Carrera</span><div class="session-main">Maratón Lanzarote 🎯</div><div class="session-sub">objetivo: 3:41 · 5:15 /km</div></div></div>
+      <div class="session-row" id="dic-lun-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">LUN</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">20 min muy suave</div><div class="session-sub">piernas frescas</div></div></div>
+      <div class="session-row" id="dic-mie-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">MIE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-tapering">Tapering</span><div class="session-main">Descanso o 15 min andando</div><div class="session-sub">piernas frescas</div></div></div>
+      <div class="session-row" id="dic-vie-1" onclick="toggleCheck(this)"><div class="session-left"><div class="session-day">VIE</div><div class="check-circle"><span class="check-icon">✓</span></div></div><div class="session-content"><span class="session-tag tag-race">Carrera</span><div class="session-main">Maratón Lanzarote 🎯</div><div class="session-sub">objetivo: 3:41 · 5:15 /km</div></div></div>
     </div>
   </div>
 </div>
@@ -495,9 +504,26 @@ function showMonth(id, btn) {
   document.getElementById(id).classList.add('visible');
   btn.classList.add('active');
 }
+
 function toggleWeek(header) {
   header.parentElement.classList.toggle('collapsed');
 }
+
+function toggleCheck(row) {
+  const id = row.id;
+  const isDone = row.classList.toggle('done');
+  localStorage.setItem('check_' + id, isDone ? '1' : '0');
+}
+
+function loadChecks() {
+  document.querySelectorAll('.session-row[id]').forEach(row => {
+    const saved = localStorage.getItem('check_' + row.id);
+    if (saved === '1') row.classList.add('done');
+    else if (saved === '0') row.classList.remove('done');
+  });
+}
+
+loadChecks();
 </script>
 </body>
 </html>
