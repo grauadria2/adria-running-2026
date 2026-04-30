@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Entrenamiento 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F7F6F2;
+    --surface: #FFFFFF;
+    --border: #E8E6E0;
+    --text: #1A1917;
+    --muted: #6B6A66;
+    --accent: #1A1917;
+    --z2-bg: #E8F0FB; --z2-text: #1A3A6B;
+    --series-bg: #E6F4E0; --series-text: #1E4D12;
+    --long-bg: #EEE9FB; --long-text: #3A1F7A;
+    --descarga-bg: #FDF0DC; --descarga-text: #6B3D08;
+    --trans-bg: #EFEFED; --trans-text: #3A3937;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 2rem;
+  }
+
+  header {
+    background: var(--text);
+    color: #fff;
+    padding: 1.25rem 1.25rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  header h1 {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  header p {
+    font-size: 12px;
+    opacity: 0.55;
+    margin-top: 2px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .month-nav {
+    display: flex;
+    gap: 8px;
+    padding: 1rem 1.25rem 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .month-nav::-webkit-scrollbar { display: none; }
+
+  .month-btn {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .month-btn.active {
+    background: var(--text);
+    border-color: var(--text);
+    color: #fff;
+  }
+
+  .month-section { display: none; padding: 1rem 1.25rem 0; }
+  .month-section.visible { display: block; }
+
+  .month-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .week-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+
+  .week-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .week-label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .week-dates {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-top: 1px;
+  }
+
+  .week-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .badge-carga { background: #E6F4E0; color: #1E4D12; }
+  .badge-descarga { background: #FDF0DC; color: #6B3D08; }
+  .badge-trans { background: #EFEFED; color: #3A3937; }
+
+  .week-body { padding: 4px 0 8px; }
+
+  .session-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .session-row:last-child { border-bottom: none; }
+
+  .session-day {
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    min-width: 28px;
+    padding-top: 2px;
+  }
+
+  .session-content { flex: 1; }
+
+  .session-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 4px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .tag-z2 { background: var(--z2-bg); color: var(--z2-text); }
+  .tag-series { background: var(--series-bg); color: var(--series-text); }
+  .tag-long { background: var(--long-bg); color: var(--long-text); }
+  .tag-descarga { background: var(--descarga-bg); color: var(--descarga-text); }
+  .tag-trans { background: var(--trans-bg); color: var(--trans-text); }
+
+  .session-main {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--text);
+  }
+
+  .session-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .chevron {
+    font-size: 16px;
+    color: var(--muted);
+    transition: transform 0.2s;
+  }
+  .week-card.collapsed .chevron { transform: rotate(-90deg); }
+  .week-card.collapsed .week-body { display: none; }
+
+  .objetivos {
+    background: var(--text);
+    color: #fff;
+    border-radius: 16px;
+    padding: 1.25rem;
+    margin: 1rem 1.25rem 0;
+  }
+  .objetivos h2 { font-size: 13px; opacity: 0.5; margin-bottom: 12px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .obj-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 14px; }
+  .obj-row:last-child { border-bottom: none; }
+  .obj-label { opacity: 0.6; font-size: 13px; }
+  .obj-val { font-weight: 600; font-family: 'DM Mono', monospace; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Plan Entrenamiento 2026</h1>
+  <p>Mar · Jue · Dom — Bilbao nov · Maratón dic</p>
+</header>
+
+<div class="objetivos">
+  <h2>Objetivos</h2>
+  <div class="obj-row"><span class="obj-label">Test agosto</span><span class="obj-val">21km</span></div>
+  <div class="obj-row"><span class="obj-label">Bilbao (nov)</span><span class="obj-val">4:30 media</span></div>
+  <div class="obj-row"><span class="obj-label">Maratón (dic)</span><span class="obj-val">3:41 objetivo</span></div>
+  <div class="obj-row"><span class="obj-label">Long run Z2</span><span class="obj-val">156 bpm</span></div>
+</div>
+
+<div class="month-nav">
+  <button class="month-btn active" onclick="showMonth('mayo', this)">Mayo</button>
+  <button class="month-btn" onclick="showMonth('junio', this)">Junio</button>
+  <button class="month-btn" onclick="showMonth('julio', this)">Julio</button>
+</div>
+
+<!-- MAYO -->
+<div class="month-section visible" id="mayo">
+  <div class="month-title">Mayo</div>
+
+  <!-- Sem 1 -->
+  <div class="week-card">
+    <div class="week-header" onclick="toggleWeek(this)">
+      <div><div class="week-label">Semana 1</div><div class="week-dates">5 – 11 may</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
+    </div>
+    <div class="week-body">
+      <div class="session-row">
+        <div class="session-day">MAR</div>
+        <div class="session-content">
+          <span class="session-tag tag-z2">Z2</span>
+          <div class="session-main">50 min a 155–158 bpm</div>
+          <div class="session-sub">pace el que salga</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">JUE</div>
+        <div class="session-content">
+          <span class="session-tag tag-series">Series</span>
+          <div class="session-main">4×800m a 4:10–4:20 /km</div>
+          <div class="session-sub">2 km cal. + 1–2 km vuelta</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">DOM</div>
+        <div class="session-content">
+          <span class="session-tag tag-long">Long run</span>
+          <div class="session-main">2:00h a 156 bpm</div>
+          <div class="session-sub">~17–18 km</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sem 2 -->
+  <div class="week-card">
+    <div class="week-header" onclick="toggleWeek(this)">
+      <div><div class="week-label">Semana 2</div><div class="week-dates">12 – 18 may</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
+    </div>
+    <div class="week-body">
+      <div class="session-row">
+        <div class="session-day">MAR</div>
+        <div class="session-content">
+          <span class="session-tag tag-z2">Z2</span>
+          <div class="session-main">55 min a 155–158 bpm</div>
+          <div class="session-sub">pace el que salga</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">JUE</div>
+        <div class="session-content">
+          <span class="session-tag tag-series">Series</span>
+          <div class="session-main">5×800m a 4:05–4:10 /km</div>
+          <div class="session-sub">2 km cal. + 1–2 km vuelta</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">DOM</div>
+        <div class="session-content">
+          <span class="session-tag tag-long">Long run</span>
+          <div class="session-main">2:30h a 156 bpm</div>
+          <div class="session-sub">~21–22 km</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sem 3 descarga -->
+  <div class="week-card">
+    <div class="week-header" onclick="toggleWeek(this)">
+      <div><div class="week-label">Semana 3</div><div class="week-dates">19 – 25 may</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-descarga">Descarga</span><span class="chevron">›</span></div>
+    </div>
+    <div class="week-body">
+      <div class="session-row">
+        <div class="session-day">MAR</div>
+        <div class="session-content">
+          <span class="session-tag tag-descarga">Descarga</span>
+          <div class="session-main">40 min a 155–158 bpm</div>
+          <div class="session-sub">pace el que salga</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">JUE</div>
+        <div class="session-content">
+          <span class="session-tag tag-descarga">Descarga</span>
+          <div class="session-main">4×400m a 3:50 /km</div>
+          <div class="session-sub">corto y fresco</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">DOM</div>
+        <div class="session-content">
+          <span class="session-tag tag-descarga">Descarga</span>
+          <div class="session-main">1:30h a 156 bpm</div>
+          <div class="session-sub">~12–13 km</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sem 4 -->
+  <div class="week-card">
+    <div class="week-header" onclick="toggleWeek(this)">
+      <div><div class="week-label">Semana 4</div><div class="week-dates">26 may – 1 jun</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
+    </div>
+    <div class="week-body">
+      <div class="session-row">
+        <div class="session-day">MAR</div>
+        <div class="session-content">
+          <span class="session-tag tag-z2">Z2</span>
+          <div class="session-main">55–60 min a 155–158 bpm</div>
+          <div class="session-sub">pace el que salga</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">JUE</div>
+        <div class="session-content">
+          <span class="session-tag tag-series">Series</span>
+          <div class="session-main">5×800m a 4:05–4:10 /km</div>
+          <div class="session-sub">2 km cal. + 1–2 km vuelta</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">DOM</div>
+        <div class="session-content">
+          <span class="session-tag tag-long">Long run</span>
+          <div class="session-main">2:30h a 156 bpm</div>
+          <div class="session-sub">~21–22 km</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JUNIO -->
+<div class="month-section" id="junio">
+  <div class="month-title">Junio</div>
+
+  <!-- Sem 1 descarga/viaje -->
+  <div class="week-card">
+    <div class="week-header" onclick="toggleWeek(this)">
+      <div><div class="week-label">Semana 1</div><div class="week-dates">2 – 8 jun</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-descarga">Descarga</span><span class="chevron">›</span></div>
+    </div>
+    <div class="week-body">
+      <div class="session-row">
+        <div class="session-day">MAR</div>
+        <div class="session-content">
+          <span class="session-tag tag-descarga">Descarga</span>
+          <div class="session-main">40 min a 155–158 bpm</div>
+          <div class="session-sub">viaje — suave</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">JUE</div>
+        <div class="session-content">
+          <span class="session-tag tag-descarga">Descarga</span>
+          <div class="session-main">4×400m a 3:50 /km</div>
+          <div class="session-sub">corto y fresco</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">DOM</div>
+        <div class="session-content">
+          <span class="session-tag tag-long">Long run</span>
+          <div class="session-main">1:30h a 156 bpm</div>
+          <div class="session-sub">~12–13 km</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sem 2 -->
+  <div class="week-card">
+    <div class="week-header" onclick="toggleWeek(this)">
+      <div><div class="week-label">Semana 2</div><div class="week-dates">9 – 15 jun</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
+    </div>
+    <div class="week-body">
+      <div class="session-row">
+        <div class="session-day">MAR</div>
+        <div class="session-content">
+          <span class="session-tag tag-z2">Z2</span>
+          <div class="session-main">60 min a 155–158 bpm</div>
+          <div class="session-sub">pace el que salga</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">JUE</div>
+        <div class="session-content">
+          <span class="session-tag tag-series">Series</span>
+          <div class="session-main">4×1km a 4:10–4:15 /km</div>
+          <div class="session-sub">2 km cal. + 1–2 km vuelta</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">DOM</div>
+        <div class="session-content">
+          <span class="session-tag tag-long">Long run</span>
+          <div class="session-main">2:30h a 156 bpm</div>
+          <div class="session-sub">~21–22 km</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sem 3 -->
+  <div class="week-card">
+    <div class="week-header" onclick="toggleWeek(this)">
+      <div><div class="week-label">Semana 3</div><div class="week-dates">16 – 22 jun</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
+    </div>
+    <div class="week-body">
+      <div class="session-row">
+        <div class="session-day">MAR</div>
+        <div class="session-content">
+          <span class="session-tag tag-z2">Z2</span>
+          <div class="session-main">65 min a 155–158 bpm</div>
+          <div class="session-sub">pace el que salga</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">JUE</div>
+        <div class="session-content">
+          <span class="session-tag tag-series">Series</span>
+          <div class="session-main">5×1km a 4:10 /km</div>
+          <div class="session-sub">2 km cal. + 1–2 km vuelta</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">DOM</div>
+        <div class="session-content">
+          <span class="session-tag tag-long">Long run</span>
+          <div class="session-main">2:45h a 156 bpm</div>
+          <div class="session-sub">~23–24 km</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sem 4 -->
+  <div class="week-card">
+    <div class="week-header" onclick="toggleWeek(this)">
+      <div><div class="week-label">Semana 4</div><div class="week-dates">23 – 29 jun</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
+    </div>
+    <div class="week-body">
+      <div class="session-row">
+        <div class="session-day">MAR</div>
+        <div class="session-content">
+          <span class="session-tag tag-z2">Z2</span>
+          <div class="session-main">65 min a 155–158 bpm</div>
+          <div class="session-sub">pace el que salga</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">JUE</div>
+        <div class="session-content">
+          <span class="session-tag tag-series">Series</span>
+          <div class="session-main">5×1km a 4:05 /km</div>
+          <div class="session-sub">2 km cal. + 1–2 km vuelta</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">DOM</div>
+        <div class="session-content">
+          <span class="session-tag tag-long">Long run</span>
+          <div class="session-main">3:00h a 156 bpm</div>
+          <div class="session-sub">~25–27 km</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JULIO -->
+<div class="month-section" id="julio">
+  <div class="month-title">Julio</div>
+
+  <!-- Sem 1 descarga -->
+  <div class="week-card">
+    <div class="week-header" onclick="toggleWeek(this)">
+      <div><div class="week-label">Semana 1</div><div class="week-dates">30 jun – 6 jul</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-descarga">Descarga</span><span class="chevron">›</span></div>
+    </div>
+    <div class="week-body">
+      <div class="session-row">
+        <div class="session-day">MAR</div>
+        <div class="session-content">
+          <span class="session-tag tag-descarga">Descarga</span>
+          <div class="session-main">40 min a 155–158 bpm</div>
+          <div class="session-sub">pace el que salga</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">JUE</div>
+        <div class="session-content">
+          <span class="session-tag tag-descarga">Descarga</span>
+          <div class="session-main">4×400m a 3:50 /km</div>
+          <div class="session-sub">corto y fresco</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">DOM</div>
+        <div class="session-content">
+          <span class="session-tag tag-descarga">Descarga</span>
+          <div class="session-main">1:30h a 156 bpm</div>
+          <div class="session-sub">~12–13 km</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sem 2 -->
+  <div class="week-card">
+    <div class="week-header" onclick="toggleWeek(this)">
+      <div><div class="week-label">Semana 2</div><div class="week-dates">7 – 13 jul</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
+    </div>
+    <div class="week-body">
+      <div class="session-row">
+        <div class="session-day">MAR</div>
+        <div class="session-content">
+          <span class="session-tag tag-z2">Z2</span>
+          <div class="session-main">65 min a 155–158 bpm</div>
+          <div class="session-sub">pace el que salga</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">JUE</div>
+        <div class="session-content">
+          <span class="session-tag tag-series">Series</span>
+          <div class="session-main">5×1km a 4:05 /km</div>
+          <div class="session-sub">2 km cal. + 1–2 km vuelta</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">DOM</div>
+        <div class="session-content">
+          <span class="session-tag tag-long">Long run</span>
+          <div class="session-main">3:00h a 156 bpm</div>
+          <div class="session-sub">~25–27 km</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sem 3 -->
+  <div class="week-card">
+    <div class="week-header" onclick="toggleWeek(this)">
+      <div><div class="week-label">Semana 3</div><div class="week-dates">14 – 20 jul</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
+    </div>
+    <div class="week-body">
+      <div class="session-row">
+        <div class="session-day">MAR</div>
+        <div class="session-content">
+          <span class="session-tag tag-z2">Z2</span>
+          <div class="session-main">70 min a 155–158 bpm</div>
+          <div class="session-sub">pace el que salga</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">JUE</div>
+        <div class="session-content">
+          <span class="session-tag tag-series">Series</span>
+          <div class="session-main">5×1km a 4:00 /km</div>
+          <div class="session-sub">2 km cal. + 1–2 km vuelta</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">DOM</div>
+        <div class="session-content">
+          <span class="session-tag tag-long">Long run</span>
+          <div class="session-main">3:00h — últimos 20 min a 5:30 /km</div>
+          <div class="session-sub">empieza el ritmo específico</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sem 4 -->
+  <div class="week-card">
+    <div class="week-header" onclick="toggleWeek(this)">
+      <div><div class="week-label">Semana 4</div><div class="week-dates">21 – 27 jul</div></div>
+      <div style="display:flex;align-items:center;gap:8px"><span class="week-badge badge-carga">Carga</span><span class="chevron">›</span></div>
+    </div>
+    <div class="week-body">
+      <div class="session-row">
+        <div class="session-day">MAR</div>
+        <div class="session-content">
+          <span class="session-tag tag-z2">Z2</span>
+          <div class="session-main">70 min a 155–158 bpm</div>
+          <div class="session-sub">pace el que salga</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">JUE</div>
+        <div class="session-content">
+          <span class="session-tag tag-series">Series</span>
+          <div class="session-main">6×1km a 4:00 /km</div>
+          <div class="session-sub">2 km cal. + 1–2 km vuelta</div>
+        </div>
+      </div>
+      <div class="session-row">
+        <div class="session-day">DOM</div>
+        <div class="session-content">
+          <span class="session-tag tag-long">Long run</span>
+          <div class="session-main">3:00h — últimos 30 min a 5:20 /km</div>
+          <div class="session-sub">ritmo específico maratón</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showMonth(id, btn) {
+  document.querySelectorAll('.month-section').forEach(s => s.classList.remove('visible'));
+  document.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('visible');
+  btn.classList.add('active');
+}
+
+function toggleWeek(header) {
+  const card = header.parentElement;
+  card.classList.toggle('collapsed');
+}
+</script>
+</body>
+</html>
